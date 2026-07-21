@@ -26,24 +26,22 @@ const featured = machineFiles
   .filter((m) => m && m.featured)
   .slice(0, 3);
 
-// 中间两张并排促销卡（复刻特斯拉官网中部双图布局），使用你提供的演示图。
-// 以后可改为从 CMS 读取「品类」集合。
-const promoCards = [
-  {
-    image: 'images/Homepage-Promo-Model-3-Y-Desktop-CN-v3.jpg',
-    title: '二手挖掘机',
-    subtitle: '卡特 · 小松 · 日立 · 神钢',
-    primaryLink: `${base}machines`,
-    outlineLink: `${base}contact`,
-  },
-  {
-    image: 'images/Homepage-Card-Model-Y-Desktop-CN-v4.jpg',
-    title: '二手装载机',
-    subtitle: '主流品牌 · 成色优选',
-    primaryLink: `${base}machines`,
-    outlineLink: `${base}contact`,
-  },
+// 中间并排促销卡（复刻特斯拉官网中部双图布局）。
+// 数据来自 site.json 的 promo_cards → 可在 Decap 后台「网站设置」里增删/换图/改文案。
+// 后台未配置时用下面这组演示图兜底。
+const defaultPromoCards = [
+  { image: 'images/Homepage-Promo-Model-3-Y-Desktop-CN-v3.jpg', title: '二手挖掘机', subtitle: '卡特 · 小松 · 日立 · 神钢' },
+  { image: 'images/Homepage-Card-Model-Y-Desktop-CN-v4.jpg', title: '二手装载机', subtitle: '主流品牌 · 成色优选' },
 ];
+const promoCards = (
+  Array.isArray(siteData.promo_cards) && siteData.promo_cards.length ? siteData.promo_cards : defaultPromoCards
+).map((c) => ({
+  image: c.image || 'images/placeholder.svg',
+  title: c.title || '',
+  subtitle: c.subtitle || '',
+  primaryLink: `${base}machines`,
+  outlineLink: `${base}contact`,
+}));
 ---
 
 <BaseLayout title="首页" transparentHeader={true}>

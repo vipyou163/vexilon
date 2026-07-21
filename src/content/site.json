@@ -8,5 +8,17 @@
   "seo_description": "专业二手工程机械设备交易平台，提供卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明。",
   "hero_headline": "二手工程机械<br/>品质优选 · 全国直发",
   "hero_subheadline": "数百台卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明",
-  "hero_image": "images/Homepage-Card-Model-3-Desktop-CN-v2.jpg"
+  "hero_image": "images/Homepage-Card-Model-3-Desktop-CN-v2.jpg",
+  "promo_cards": [
+    {
+      "image": "images/Homepage-Promo-Model-3-Y-Desktop-CN-v3.jpg",
+      "title": "二手挖掘机",
+      "subtitle": "卡特 · 小松 · 日立 · 神钢"
+    },
+    {
+      "image": "images/Homepage-Card-Model-Y-Desktop-CN-v4.jpg",
+      "title": "二手装载机",
+      "subtitle": "主流品牌 · 成色优选"
+    }
+  ]
 }

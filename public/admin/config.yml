@@ -32,8 +32,8 @@ collections:
         default: available
       - { label: 首页推荐, name: featured, widget: boolean, default: false, required: false }
       - { label: 详细描述, name: description, widget: markdown, required: false }
-      - { label: 封面图片, name: cover_image, widget: string }
-      - { label: 更多图片, name: gallery, widget: list, field: { label: 图片URL, name: url, widget: string }, required: false }
+      - { label: 封面图片, name: cover_image, widget: image, media_library: { config: { multiple: false } } }
+      - { label: 更多图片, name: gallery, widget: list, field: { label: 图片, name: url, widget: image }, required: false }
 
   - name: posts
     label: 行业资讯
@@ -47,7 +47,7 @@ collections:
     fields:
       - { label: 标题, name: title, widget: string }
       - { label: 发布日期, name: date, widget: datetime, format: "YYYY-MM-DD" }
-      - { label: 封面图片, name: cover, widget: string, required: false }
+      - { label: 封面图片, name: cover, widget: image, required: false }
       - { label: 正文内容, name: body, widget: markdown }
 
   - name: site
@@ -69,4 +69,15 @@ collections:
           - { label: SEO 描述, name: seo_description, widget: string, required: false }
           - { label: 首页主张标题, name: hero_headline, widget: string, required: false }
           - { label: 首页主张副标题, name: hero_subheadline, widget: string, required: false }
-          - { label: 首页大图, name: hero_image, widget: string, required: false, hint: "填 public/images 下的图片路径，如 images/xxx.jpg" }
+          - { label: 首页大图, name: hero_image, widget: image, required: false, hint: "点击上传或从媒体库选择首屏全屏大图" }
+          - label: 首页促销卡（中间并排大图）
+            name: promo_cards
+            widget: list
+            required: false
+            label_singular: 促销卡
+            summary: "{{fields.title}}"
+            hint: "首页中部并排展示的图卡，可增删、换图、改标题。建议放 1~2 张。"
+            fields:
+              - { label: 图片, name: image, widget: image }
+              - { label: 标题, name: title, widget: string }
+              - { label: 副标题, name: subtitle, widget: string, required: false }

@@ -2,8 +2,8 @@ backend:
   name: github
   repo: vipyou163/vexilon
   branch: main
-  base_url: https://github.com
-  site_domain: https://vipyou163.github.io/vexilon
+  base_url: https://oauth.decapcms.app
+  site_domain: vipyou163.github.io
 
 media_folder: public/images
 public_folder: /images

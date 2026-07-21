@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://your-username.github.io',
-  base: '/',
+  site: 'https://vipyou163.github.io',
+  base: '/vexilon',
   build: {
     assets: '_assets',
   },

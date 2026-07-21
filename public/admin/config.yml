@@ -1,9 +1,9 @@
 backend:
   name: github
-  repo: your-username/qiye
+  repo: vipyou163/vexilon
   branch: main
   base_url: https://github.com
-  site_domain: https://your-username.github.io
+  site_domain: https://vipyou163.github.io/vexilon
 
 media_folder: public/images
 public_folder: /images

@@ -10,6 +10,6 @@ featured: false
 description: |-
   正文图片测试
 
-  ![](/images/Homepage-Card-Model-3-Desktop-CN-v2.jpg)
+  ![1tu](/images/Homepage-Card-Model-3-Desktop-CN-v2.jpg "2")
 cover_image: /images/【哲风壁纸】二次元美少女-大长腿.png
 ---

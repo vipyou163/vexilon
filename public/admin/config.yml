@@ -69,3 +69,4 @@ collections:
           - { label: SEO 描述, name: seo_description, widget: string, required: false }
           - { label: 首页主张标题, name: hero_headline, widget: string, required: false }
           - { label: 首页主张副标题, name: hero_subheadline, widget: string, required: false }
+          - { label: 首页大图, name: hero_image, widget: string, required: false, hint: "填 public/images 下的图片路径，如 images/xxx.jpg" }

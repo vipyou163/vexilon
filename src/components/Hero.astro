@@ -1,20 +1,32 @@
 ---
-const { image, headline, subheadline } = Astro.props;
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+const {
+  image = 'images/placeholder.svg',
+  headline = '二手工程机械',
+  subheadline = '',
+  primaryText = '浏览设备库',
+  primaryLink = '#',
+  outlineText = '联系我们',
+  outlineLink = '#',
+} = Astro.props;
+
+const imgSrc = image.startsWith('http') ? image : base + image.replace(/^\//, '');
+const pLink = primaryLink.startsWith('http') ? primaryLink : base + primaryLink.replace(/^\//, '');
+const oLink = outlineLink.startsWith('http') ? outlineLink : base + outlineLink.replace(/^\//, '');
 ---
 
 <section class="hero">
-  <div class="hero-bg dark-image-wrap">
-    <img src={`${base}${(image || 'images/hero-excavator.jpg').replace(/^\//, '')}`} alt="" />
+  <img class="hero-bg" src={imgSrc} alt="" />
+  <div class="hero-scrim"></div>
+
+  <div class="hero-top fade-in">
+    <h1 class="hero-title" set:html={headline}></h1>
+    {subheadline && <p class="hero-sub fade-in" set:html={subheadline}></p>}
   </div>
-  <div class="hero-overlay-light"></div>
-  <div class="hero-content">
-    <h1 class="hero-title fade-in">{headline || '二手工程机械<br/>专业交易平台'}</h1>
-    <p class="hero-subtitle fade-in">{subheadline || '数百台卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明'}</p>
-    <div class="hero-actions fade-in">
-      <a href={`${base}machines`} class="btn btn-primary">浏览设备</a>
-      <a href={`${base}contact`} class="btn btn-outline">联系我们</a>
-    </div>
+
+  <div class="hero-actions fade-in">
+    <a class="btn btn-primary btn-lg" href={pLink}>{primaryText}</a>
+    {outlineText && <a class="btn btn-ghost btn-lg" href={oLink}>{outlineText}</a>}
   </div>
 </section>
 
@@ -22,69 +34,78 @@ const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
   .hero {
     position: relative;
     height: 100vh;
-    min-height: 600px;
-    max-height: 900px;
+    min-height: 620px;
+    max-height: 960px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     overflow: hidden;
   }
 
   .hero-bg {
     position: absolute;
     inset: 0;
-  }
-
-  .hero-bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 0;
   }
 
-  .hero-overlay-light {
+  /* 明亮风格：轻量渐变压暗，仅保证白字可读，不做成暗黑主题 */
+  .hero-scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(0,0,0,0.4) 0%,
-      rgba(0,0,0,0.15) 50%,
-      rgba(0,0,0,0.3) 100%
-    );
     z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0) 28%,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(0, 0, 0, 0.34) 100%
+    );
   }
 
-  .hero-content {
+  .hero-top {
     position: relative;
     z-index: 2;
     text-align: center;
-    max-width: 800px;
+    margin-top: 14vh;
     padding: 0 24px;
+    color: #fff;
   }
 
   .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 600;
     letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 24px;
+    line-height: 1.08;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
   }
 
-  .hero-subtitle {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    color: var(--color-text-muted);
-    margin-bottom: 40px;
-    line-height: 1.6;
-    max-width: 600px;
+  .hero-sub {
+    margin-top: 16px;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    max-width: 640px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.6;
   }
 
   .hero-actions {
+    position: relative;
+    z-index: 2;
     display: flex;
     gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: auto;
+    margin-bottom: 7vh;
   }
 
-  .hero-actions .btn { font-size: 1rem; padding: 14px 44px; }
+  @media (max-width: 640px) {
+    .hero-top { margin-top: 16vh; }
+    .hero-actions { margin-bottom: 9vh; }
+  }
 </style>

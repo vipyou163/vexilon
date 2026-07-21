@@ -121,6 +121,26 @@ button {
   background: rgba(0,0,0,0.03);
 }
 
+/* Large capsule button (Tesla-style hero / panel CTAs) */
+.btn-lg {
+  padding: 14px 52px;
+  font-size: 1rem;
+}
+
+/* Frosted ghost button (used over photos: hero / panels / promo cards) */
+.btn-ghost {
+  background: rgba(255,255,255,0.16);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.28);
+  border-color: #fff;
+}
+
 /* Status badges */
 .status-badge {
   display: inline-block;

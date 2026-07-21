@@ -2,26 +2,6 @@
 const { delay = 0, className = '' } = Astro.props;
 ---
 
-<div class="fade-in {className}" data-delay={delay}>
+<div class={`fade-in ${className}`} data-delay={delay}>
   <slot />
 </div>
-
-<script>
-  // Global IntersectionObserver for .fade-in elements
-  document.addEventListener('DOMContentLoaded', () => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const delay = entry.target.getAttribute('data-delay') || 0;
-            setTimeout(() => entry.target.classList.add('visible'), Number(delay));
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
-    );
-
-    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
-  });
-</script>

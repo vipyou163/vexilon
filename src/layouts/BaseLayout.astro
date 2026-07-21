@@ -3,12 +3,14 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-export interface Props {
-  title: string;
+interface Props {
+  title?: string;
   description?: string;
+  transparentHeader?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, transparentHeader = false } = Astro.props;
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const siteTitle = '二手工程机械 | 二手挖机';
 ---
 
@@ -19,13 +21,32 @@ const siteTitle = '二手工程机械 | 二手挖机';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title ? `${title} - ${siteTitle}` : siteTitle}</title>
     <meta name="description" content={description || '专业二手工程机械交易平台，提供卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明。'} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
-    <Header />
+    <Header transparent={transparentHeader} />
     <main>
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // 全局 fade-in 观察器：所有页面的 .fade-in 元素进入视口时淡入
+      document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const delay = entry.target.getAttribute('data-delay') || 0;
+                setTimeout(() => entry.target.classList.add('visible'), Number(delay));
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+        );
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+      });
+    </script>
   </body>
 </html>

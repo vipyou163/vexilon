@@ -1,303 +1,298 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import MachineCard from '../components/MachineCard.astro';
 import FadeIn from '../components/FadeIn.astro';
-import CTAButtons from '../components/CTAButtons.astro';
-
-// In production, these would come from Astro.glob('../../content/machines/*.md')
-// For now, use sample data to demonstrate the design
-const featuredMachines = [
-  { slug: 'cat-320d-2020', brand: '卡特彼勒', model: '320D', year: 2020, hours: 4200, price_cny: 285000, location: '上海', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'komatsu-pc200-2019', brand: '小松', model: 'PC200-8', year: 2019, hours: 5800, price_cny: 238000, location: '山东', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'hitachi-zx210-2021', brand: '日立', model: 'ZX210', year: 2021, hours: 3200, price_cny: 320000, location: '江苏', status: 'reserved', cover_image: '/images/placeholder.svg' },
-  { slug: 'kobelco-sk200-2018', brand: '神钢', model: 'SK200-8', year: 2018, hours: 7600, price_cny: 195000, location: '安徽', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'sany-sy215-2022', brand: '三一', model: 'SY215C', year: 2022, hours: 1800, price_cny: 268000, location: '湖南', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
-];
+import siteData from '../content/site.json';
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
-const latestPosts = [
-  { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', cover: '/images/placeholder.svg' },
-  { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', cover: '/images/placeholder.svg' },
-  { slug: 'market-trends-jul', title: '2026年二手工程机械市场走势分析', date: '2026-07-05', cover: '/images/placeholder.svg' },
+
+// 首页大图 / 主张：来自 site.json，未来可由 Decap 后台「网站设置」控制
+const heroImage = siteData.hero_image || 'images/Homepage-Card-Model-3-Desktop-CN-v2.jpg';
+const heroHeadline = siteData.hero_headline || '二手工程机械<br/>品质优选 · 全国直发';
+const heroSubheadline =
+  siteData.hero_subheadline || '数百台卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明';
+
+// 精选设备：直接读取 CMS 内容目录（machines/*.md 中 featured:true 的条目）。
+// 现在目录为空 → 这部分自动跳过；以后在后台上架并勾选「首页推荐」即出现。
+// 目录为空时 Astro.glob 会抛错，这里用 try/catch 兜底，保证构建不中断。
+let machineFiles = [];
+try {
+  machineFiles = await Astro.glob('../content/machines/*.{md,mdx}');
+} catch {
+  machineFiles = [];
+}
+const featured = machineFiles
+  .map((f) => ({ ...f.frontmatter, url: f.url }))
+  .filter((m) => m && m.featured)
+  .slice(0, 3);
+
+// 中间两张并排促销卡（复刻特斯拉官网中部双图布局），使用你提供的演示图。
+// 以后可改为从 CMS 读取「品类」集合。
+const promoCards = [
+  {
+    image: 'images/Homepage-Promo-Model-3-Y-Desktop-CN-v3.jpg',
+    title: '二手挖掘机',
+    subtitle: '卡特 · 小松 · 日立 · 神钢',
+    primaryLink: `${base}machines`,
+    outlineLink: `${base}contact`,
+  },
+  {
+    image: 'images/Homepage-Card-Model-Y-Desktop-CN-v4.jpg',
+    title: '二手装载机',
+    subtitle: '主流品牌 · 成色优选',
+    primaryLink: `${base}machines`,
+    outlineLink: `${base}contact`,
+  },
 ];
 ---
 
-<BaseLayout title="首页">
+<BaseLayout title="首页" transparentHeader={true}>
+  <!-- 1. 全屏主视觉 -->
   <Hero
-    headline="二手工程机械<br/>专业交易平台"
-    subheadline="数百台卡特、小松、日立、神钢等品牌二手挖机<br/>品质保障，价格透明，全国可发"
+    image={heroImage}
+    headline={heroHeadline}
+    subheadline={heroSubheadline}
+    primaryText="浏览设备库"
+    primaryLink="machines"
+    outlineText="联系顾问"
+    outlineLink="contact"
   />
 
-  <!-- Featured Machines -->
-  <section class="section featured-section">
-    <div class="container">
-      <FadeIn>
-        <h2 class="section-title">精选设备</h2>
-        <p class="section-subtitle">严格质检，真实车况，让每一台机器都经得起考验</p>
-      </FadeIn>
-      <div class="grid-3">
-        {featuredMachines.slice(0, 6).map((m, i) => (
-          <div style={`transition-delay: ${i * 100}ms`}>
-            <MachineCard {...m} />
-          </div>
-        ))}
-      </div>
-      <div class="section-cta">
-        <CTAButtons primaryText="查看全部设备" primaryLink={`${base}machines`} />
-      </div>
-    </div>
-  </section>
-
-  <!-- About / Why Us -->
-  <section class="section about-section">
-    <div class="container">
-      <div class="about-grid">
-        <FadeIn>
-          <div class="about-text">
-            <h2 class="section-title">为什么选择我们</h2>
-            <p class="section-subtitle">十年行业经验，服务超过500家客户，让设备交易更简单</p>
-            <div class="stats">
-              <div class="stat">
-                <span class="stat-number">500+</span>
-                <span class="stat-label">服务客户</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">300+</span>
-                <span class="stat-label">在售设备</span>
-              </div>
-              <div class="stat">
-                <span class="stat-number">98%</span>
-                <span class="stat-label">客户满意度</span>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-        <FadeIn>
-          <div class="about-features">
-            <div class="feature">
-              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-              <div>
-                <h4>品质保障</h4>
-                <p>每台设备经过专业检测，真实车况无隐瞒</p>
-              </div>
-            </div>
-            <div class="feature">
-              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-              <div>
-                <h4>快速成交</h4>
-                <p>手续齐全，物流配送全国，最快3天交付</p>
-              </div>
-            </div>
-            <div class="feature">
-              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
-              <div>
-                <h4>售后无忧</h4>
-                <p>提供整机质保，技术团队随时响应支持</p>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </div>
-    </div>
-  </section>
-
-  <!-- Latest Posts -->
-  <section class="section posts-section">
-    <div class="container">
-      <FadeIn>
-        <h2 class="section-title">行业资讯</h2>
-      </FadeIn>
-      <div class="grid-3">
-        {latestPosts.map((post) => (
-          <a href={`${base}posts/${post.slug}`} class="post-card fade-in">
-            <div class="post-image dark-image-wrap">
-              <img src={`${base}${(post.cover || 'images/placeholder.svg').replace(/^\//, '')}`} alt={post.title} loading="lazy" />
-            </div>
-            <div class="post-body">
-              <time class="post-date">{post.date}</time>
-              <h3 class="post-title">{post.title}</h3>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div class="section-cta">
-        <CTAButtons primaryText="查看全部文章" primaryLink={`${base}posts`} />
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="section cta-section">
-    <div class="container">
-      <FadeIn>
-        <div class="cta-block">
-          <h2 class="cta-title">找不到心仪的设备？</h2>
-          <p class="cta-desc">告诉我们您的需求，我们帮您全国找车</p>
-          <CTAButtons
-            primaryText="立即咨询"
-            primaryLink={`${base}contact`}
-            outlineText="浏览设备库"
-            outlineLink={`${base}machines`}
-            dark={false}
-          />
+  <!-- 2. 精选设备：CMS 驱动的全屏面板（目录空时自动隐藏） -->
+  {
+    featured.map((m) => (
+      <section class="panel">
+        <img
+          class="panel-bg"
+          src={base + (m.cover_image || 'images/placeholder.svg').replace(/^\//, '')}
+          alt={`${m.brand} ${m.model}`}
+        />
+        <div class="panel-scrim" />
+        <div class="panel-top fade-in">
+          <h2 class="panel-title">{m.brand} {m.model}</h2>
+          <p class="panel-meta">
+            {m.year} 年 · {m.hours} 小时 · {m.location} · {m.price_cny} 元
+          </p>
         </div>
-      </FadeIn>
-    </div>
+        <div class="panel-actions fade-in">
+          <a class="btn btn-primary btn-lg" href={m.url || `${base}machines`}>查看详情</a>
+          <a class="btn btn-ghost btn-lg" href={`${base}contact`}>立即询价</a>
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- 3. 中间两张并排促销卡（特斯拉风格） -->
+  <section class="promo-grid">
+    {
+      promoCards.map((c) => (
+        <section class="promo-card fade-in">
+          <img class="promo-bg" src={base + c.image.replace(/^\//, '')} alt={c.title} />
+          <div class="promo-scrim" />
+          <div class="promo-top">
+            <h3 class="promo-title">{c.title}</h3>
+            <p class="promo-sub">{c.subtitle}</p>
+          </div>
+          <div class="promo-actions">
+            <a class="btn btn-primary btn-lg" href={c.primaryLink}>查看设备</a>
+            <a class="btn btn-ghost btn-lg" href={c.outlineLink}>联系顾问</a>
+          </div>
+        </section>
+      ))
+    }
+  </section>
+
+  <!-- 4. 咨询 CTA（明亮浅色区块） -->
+  <section class="cta-strip">
+    <FadeIn>
+      <div class="cta-inner">
+        <h2 class="cta-title">找不到心仪的设备？</h2>
+        <p class="cta-desc">告诉我们您的需求，全国范围帮您找车</p>
+        <div class="cta-actions">
+          <a class="btn btn-primary btn-lg" href={`${base}contact`}>立即咨询</a>
+          <a class="btn btn-outline btn-lg" href={`${base}machines`}>浏览设备库</a>
+        </div>
+      </div>
+    </FadeIn>
   </section>
 </BaseLayout>
 
 <style>
-  .featured-section { background: var(--color-bg); }
-
-  .section-cta {
-    display: flex;
-    justify-content: center;
-    margin-top: 48px;
-  }
-
-  .about-section { background: var(--color-bg-alt); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-  }
-
-  .stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 32px;
-  }
-
-  .stat {
+  /* 精选设备全屏面板 */
+  .panel {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
-  }
-
-  .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-accent);
-  }
-
-  .stat-label {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    margin-top: 4px;
-  }
-
-  .about-features {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-
-  .feature {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .feature-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-sm);
-    background: rgba(52,87,213,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--color-accent);
-  }
-
-  .feature h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-
-  .feature p {
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-  }
-
-  .posts-section { background: var(--color-bg); }
-
-  .post-card {
-    display: block;
-    border-radius: var(--radius-md);
     overflow: hidden;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    transition: border-color 0.3s, transform 0.3s;
   }
 
-  .post-card:hover {
-    border-color: var(--color-border-light);
-    transform: translateY(-4px);
-  }
-
-  .post-image {
-    aspect-ratio: 16 / 9;
-  }
-
-  .post-image img {
+  .panel-bg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 0;
   }
 
-  .post-body {
-    padding: 20px;
+  .panel-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0) 35%,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(0, 0, 0, 0.32) 100%
+    );
   }
 
-  .post-date {
-    font-size: 0.8rem;
-    color: var(--color-text-dim);
+  .panel-top {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 13vh;
+    color: #fff;
+    padding: 0 24px;
   }
 
-  .post-title {
-    font-size: 1rem;
+  .panel-title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
     font-weight: 600;
-    margin-top: 8px;
-    line-height: 1.4;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
   }
 
-  .cta-section {
-    background: var(--color-bg-alt);
+  .panel-meta {
+    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .panel-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: auto;
+    margin-bottom: 7vh;
+  }
+
+  /* 中间两张并排卡片 */
+  .promo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .promo-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 88vh;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .promo-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 0.6s ease;
+  }
+
+  .promo-card:hover .promo-bg {
+    transform: scale(1.04);
+  }
+
+  .promo-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.16) 0%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0.38) 100%
+    );
+  }
+
+  .promo-top {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 10vh;
+    padding: 0 24px;
+  }
+
+  .promo-title {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .promo-sub {
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .promo-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: auto;
+    margin-bottom: 8vh;
+  }
+
+  /* 咨询 CTA：明亮浅色区块 */
+  .cta-strip {
+    background: var(--color-bg);
+    padding: 110px 0;
     text-align: center;
   }
 
-  .cta-block {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
   .cta-title {
-    font-size: 2rem;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-weight: 600;
+    letter-spacing: -0.02em;
     margin-bottom: 12px;
   }
 
   .cta-desc {
     color: var(--color-text-muted);
-    margin-bottom: 32px;
     font-size: 1.05rem;
+    margin-bottom: 36px;
   }
 
-  .cta-block .cta-group { justify-content: center; }
+  .cta-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
   @media (max-width: 768px) {
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .stats { gap: 24px; }
-    .stat-number { font-size: 1.6rem; }
-  }
-
-  @media (max-width: 640px) {
-    .stats { flex-direction: column; gap: 16px; }
+    .promo-grid {
+      grid-template-columns: 1fr;
+    }
+    .promo-card {
+      min-height: 70vh;
+    }
   }
 </style>

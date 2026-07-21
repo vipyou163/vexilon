@@ -2,62 +2,41 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const samplePosts = [
-    {
-      slug: 'choose-used-excavator',
-      frontmatter: {
-        title: '二手挖机选购指南：5个关键检查点',
-        date: '2026-07-15',
-        cover: '/images/placeholder.svg',
-        body: `## 一、发动机检查\n\n发动机是挖机的核心。启动时注意听是否有异响，观察排气颜色——蓝烟说明烧机油，黑烟说明燃烧不充分。\n\n## 二、液压系统\n\n检查液压油颜色和气味，发白或发臭说明进水或高温劣化。操作各动作看是否流畅，有无异响。\n\n## 三、底盘行走机构\n\n检查四轮一带的磨损程度，链条张紧度是否合适，驱动轮齿块是否磨损严重。\n\n## 四、工作装置\n\n检查大小臂有无焊接修复痕迹，铲斗斗齿磨损情况，各销轴间隙是否在正常范围。\n\n## 五、电气系统\n\n检查仪表盘各指示灯是否正常，空调冷暖风是否工作，GPS定位功能是否完好。`
-      }
-    },
-    {
-      slug: 'maintenance-tips',
-      frontmatter: {
-        title: '夏季工程机械保养注意事项',
-        date: '2026-07-10',
-        cover: '/images/placeholder.svg',
-        body: `## 散热系统\n\n夏季高温容易导致发动机过热。每天开工前检查散热器翅片是否堵塞，冷却液是否充足。\n\n## 液压油温\n\n连续作业时注意液压油温，超过80°C应停机冷却。考虑更换夏季用液压油。\n\n## 空调系统\n\n清理空调冷凝器，检查制冷剂压力，确保驾驶室空调正常工作。\n\n## 轮胎/履带\n\n高温下履带张紧度要适当调松，防止热胀导致过度磨损。`
-      }
-    },
-    {
-      slug: 'market-trends-jul',
-      frontmatter: {
-        title: '2026年二手工程机械市场走势分析',
-        date: '2026-07-05',
-        cover: '/images/placeholder.svg',
-        body: `## 市场概况\n\n2026年上半年，二手工程机械市场呈现稳中有升的态势。受基建投资拉动，中大挖需求旺盛。\n\n## 价格走势\n\n卡特彼勒、小松等一线品牌二手挖机价格同比上涨约5%-8%。国产二线品牌价格平稳。\n\n## 热门机型\n\n20-30吨级中型挖机市场需求最大，准新机（3年以内）流通最快。\n\n## 趋势展望\n\n预计下半年环保政策加码将进一步推动国四排放标准的设备需求。`
-      }
-    },
-  ];
-
-  return samplePosts.map(p => ({
-    params: { slug: p.slug },
-    props: p.frontmatter
-  }));
+  const modules = import.meta.glob('../content/posts/*.md');
+  const paths = [];
+  for (const [filePath, loader] of Object.entries(modules)) {
+    const mod = await loader();
+    const slug = filePath.split('/').pop().replace(/\.md$/, '');
+    paths.push({ params: { slug }, props: { mod, slug } });
+  }
+  return paths;
 }
 
+const { mod } = Astro.props;
+const { Content, frontmatter } = mod;
+const fm = frontmatter || {};
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
-const { title, date, cover, body } = Astro.props;
+const cover = (fm.cover || '').replace(/^\//, '');
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={fm.title}>
   <article class="post-article section">
     <div class="container">
       <div class="post-header">
         <div class="breadcrumb">
-          <a href={`${base}posts`}>行业资讯</a> / <span>{title}</span>
+          <a href={`${base}posts`}>行业资讯</a> / <span>{fm.title}</span>
         </div>
-        <h1 class="post-title">{title}</h1>
-        <time class="post-date">{date}</time>
+        <h1 class="post-title">{fm.title}</h1>
+        {fm.date && <time class="post-date">{fm.date}</time>}
       </div>
 
-      <div class="post-cover dark-image-wrap">
-        <img src={`${base}${(cover || 'images/placeholder.svg').replace(/^\//, '')}`} alt={title} />
-      </div>
+      {cover && (
+        <div class="post-cover dark-image-wrap">
+          <img src={`${base}${cover}`} alt={fm.title} />
+        </div>
+      )}
 
-      <div class="post-body" set:html={body}></div>
+      <div class="post-body"><Content /></div>
 
       <div class="post-footer">
         <a href={`${base}posts`} class="btn btn-outline">← 返回资讯列表</a>

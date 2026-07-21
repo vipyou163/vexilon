@@ -2,13 +2,27 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
-const posts = [
-  { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', summary: '买二手挖机不知道怎么看？本文从发动机、液压系统、底盘、工作装置和电气系统五个方面教你如何全面检查。', cover: '/images/placeholder.svg' },
-  { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', summary: '高温天气下工程机械容易出现哪些问题？夏季保养需要注意哪些细节？一文告诉你。', cover: '/images/placeholder.svg' },
-  { slug: 'market-trends-jul', title: '2026年二手工程机械市场走势分析', date: '2026-07-05', summary: '随着基建投资回暖，二手工程机械市场呈现哪些新趋势？价格走向如何？', cover: '/images/placeholder.svg' },
-  { slug: 'excavator-brands-compare', title: '卡特 vs 小松 vs 日立：三大品牌挖机对比', date: '2026-06-28', summary: '卡特彼勒、小松、日立这三大品牌的二手挖机各有什么优劣势？选购建议来了。', cover: '/images/placeholder.svg' },
-  { slug: 'financing-guide', title: '二手挖机分期购买指南', date: '2026-06-20', summary: '资金不够想分期买挖机？了解这些分期方案和注意事项。', cover: '/images/placeholder.svg' },
-];
+
+// 读取 Decap CMS 发布的真实文章（src/content/posts/*.md），按日期倒序。
+// 用 import.meta.glob 而非 Astro.glob：目录为空时不会抛 AstroGlobNoMatch 导致构建失败，
+// 且列表页与详情页从同一文件名提取 slug，链接必定一致。
+const modules = import.meta.glob('../content/posts/*.md');
+let posts = [];
+for (const [filePath, loader] of Object.entries(modules)) {
+  const mod = await loader();
+  const slug = filePath.split('/').pop().replace(/\.md$/, '');
+  const fm = mod.frontmatter || {};
+  const raw = typeof mod.rawContent === 'function' ? mod.rawContent() : '';
+  const bodyText = raw.replace(/[#>*`\-]/g, ' ').replace(/\s+/g, ' ').trim();
+  posts.push({
+    title: fm.title,
+    date: fm.date,
+    cover: fm.cover || '',
+    slug,
+    summary: bodyText.slice(0, 80) + (bodyText.length > 80 ? '…' : ''),
+  });
+}
+posts = posts.filter((p) => p.title).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 ---
 
 <BaseLayout title="行业资讯">

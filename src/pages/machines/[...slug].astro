@@ -3,44 +3,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CTAButtons from '../../components/CTAButtons.astro';
 
 export async function getStaticPaths() {
-  // In production: const entries = await Astro.glob('../../content/machines/*.md');
-  const sampleMachines = [
-    {
-      slug: 'cat-320d-2020',
-      frontmatter: {
-        brand: '卡特彼勒', model: '320D', year: 2020, hours: 4200,
-        price_cny: 285000, location: '上海', status: 'available', featured: true,
-        description: '## 车辆概况\n\n卡特彼勒320D经典机型，2020年出厂，工作4200小时，车况优良。\n\n## 设备特点\n\n- 原装进口发动机，动力强劲\n- 液压系统工况良好\n- 行走机构磨损轻微\n- 空调、收音机等配置齐全\n\n## 交易说明\n\n价格含税，可开具增值税专用发票。全国物流配送，支持实地看车。',
-        cover_image: '/images/placeholder.svg',
-        gallery: ['/images/placeholder.svg', '/images/placeholder.svg', '/images/placeholder.svg']
-      }
-    },
-    {
-      slug: 'komatsu-pc200-2019',
-      frontmatter: {
-        brand: '小松', model: 'PC200-8', year: 2019, hours: 5800,
-        price_cny: 238000, location: '山东', status: 'available', featured: true,
-        description: '## 车辆概况\n\n小松PC200-8经典机型，2019年出厂，工作5800小时，整车原版。\n\n## 设备特点\n\n- 小松SAA4D107E发动机\n- 液压泵分配阀正常\n- 四轮一带磨损50%\n- 驾驶室整洁，仪表正常',
-        cover_image: '/images/placeholder.svg',
-        gallery: ['/images/placeholder.svg', '/images/placeholder.svg']
-      }
-    },
-    {
-      slug: 'hitachi-zx210-2021',
-      frontmatter: {
-        brand: '日立', model: 'ZX210', year: 2021, hours: 3200,
-        price_cny: 320000, location: '江苏', status: 'reserved', featured: true,
-        description: '## 车辆概况\n\n日立ZX210，2021年出厂，仅工作3200小时，准新车状态。',
-        cover_image: '/images/placeholder.svg',
-        gallery: ['/images/placeholder.svg']
-      }
-    },
-  ];
-
-  return sampleMachines.map(m => ({
-    params: { slug: m.slug },
-    props: m.frontmatter
-  }));
+  // 读取 Decap CMS 发布的真实设备（src/data/machines/*.md）。
+  let entries = [];
+  try {
+    entries = await Astro.glob('../../data/machines/*.md');
+  } catch (e) {
+    entries = [];
+  }
+  return entries.map((m) => {
+    const slug = (m.file || '').split(/[\\/]/).pop().replace(/\.md$/, '');
+    const fm = m.frontmatter || {};
+    return {
+      params: { slug },
+      props: {
+        brand: fm.brand,
+        model: fm.model,
+        year: fm.year,
+        hours: fm.hours,
+        price_cny: fm.price_cny,
+        location: fm.location,
+        status: fm.status || 'available',
+        description: fm.description || '',
+        cover_image: fm.cover_image || '',
+        gallery: fm.gallery || [],
+      },
+    };
+  });
 }
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');

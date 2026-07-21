@@ -12,7 +12,7 @@ collections:
   - name: machines
     label: 二手设备
     label_singular: 设备
-    folder: src/content/machines
+    folder: src/data/machines
     create: true
     identifier_field: title
     format: frontmatter
@@ -38,7 +38,7 @@ collections:
   - name: posts
     label: 行业资讯
     label_singular: 文章
-    folder: src/content/posts
+    folder: src/data/posts
     create: true
     identifier_field: title
     format: frontmatter

@@ -17,12 +17,15 @@ const heroSubheadline =
 // 目录为空时 Astro.glob 会抛错，这里用 try/catch 兜底，保证构建不中断。
 let machineFiles = [];
 try {
-  machineFiles = await Astro.glob('../content/machines/*.{md,mdx}');
+  machineFiles = await Astro.glob('../../data/machines/*.{md,mdx}');
 } catch {
   machineFiles = [];
 }
 const featured = machineFiles
-  .map((f) => ({ ...f.frontmatter, url: f.url }))
+  .map((f) => {
+    const slug = (f.file || '').split(/[\\/]/).pop().replace(/\.(md|mdx)$/, '');
+    return { ...f.frontmatter, slug, url: `${base}machines/${slug}` };
+  })
   .filter((m) => m && m.featured)
   .slice(0, 3);
 

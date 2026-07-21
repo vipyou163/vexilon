@@ -3,22 +3,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import MachineCard from '../../components/MachineCard.astro';
 import FilterBar from '../../components/FilterBar.astro';
 
-// In production, use: const machines = await Astro.glob('../../content/machines/*.md');
-// For demo, use sample data
-const allMachines = [
-  { slug: 'cat-320d-2020', brand: '卡特彼勒', model: '320D', year: 2020, hours: 4200, price_cny: 285000, location: '上海', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'komatsu-pc200-2019', brand: '小松', model: 'PC200-8', year: 2019, hours: 5800, price_cny: 238000, location: '山东', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'hitachi-zx210-2021', brand: '日立', model: 'ZX210', year: 2021, hours: 3200, price_cny: 320000, location: '江苏', status: 'reserved', cover_image: '/images/placeholder.svg' },
-  { slug: 'kobelco-sk200-2018', brand: '神钢', model: 'SK200-8', year: 2018, hours: 7600, price_cny: 195000, location: '安徽', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'sany-sy215-2022', brand: '三一', model: 'SY215C', year: 2022, hours: 1800, price_cny: 268000, location: '湖南', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
-  { slug: 'hitachi-zx330-2019', brand: '日立', model: 'ZX330', year: 2019, hours: 5100, price_cny: 380000, location: '内蒙古', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'xcmg-xe215-2021', brand: '徐工', model: 'XE215D', year: 2021, hours: 2600, price_cny: 245000, location: '江苏', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'komatsu-pc300-2020', brand: '小松', model: 'PC300-8', year: 2020, hours: 3800, price_cny: 420000, location: '山东', status: 'reserved', cover_image: '/images/placeholder.svg' },
-  { slug: 'cat-330d-2016', brand: '卡特彼勒', model: '330D', year: 2016, hours: 11000, price_cny: 320000, location: '云南', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'hyundai-r225-2022', brand: '现代', model: 'R225LVS', year: 2022, hours: 1500, price_cny: 288000, location: '河北', status: 'available', cover_image: '/images/placeholder.svg' },
-  { slug: 'kobelco-sk350-2019', brand: '神钢', model: 'SK350-8', year: 2019, hours: 6400, price_cny: 358000, location: '四川', status: 'sold', cover_image: '/images/placeholder.svg' },
-];
+// 读取 Decap CMS 发布的真实设备（src/data/machines/*.md）。
+// 注意：不能放在 src/content/ 下，Astro 会把该目录预留给 Content Collections，
+// 导致 glob 扫不到 .md 文件。
+let allMachines = [];
+try {
+  const entries = await Astro.glob('../../data/machines/*.md');
+  allMachines = entries.map((m) => {
+    const slug = (m.file || '').split(/[\\/]/).pop().replace(/\.md$/, '');
+    const fm = m.frontmatter || {};
+    return {
+      slug,
+      brand: fm.brand,
+      model: fm.model,
+      year: fm.year,
+      hours: fm.hours,
+      price_cny: fm.price_cny,
+      location: fm.location,
+      status: fm.status || 'available',
+      cover_image: fm.cover_image || '',
+    };
+  }).filter((m) => m.brand);
+} catch (e) {
+  allMachines = [];
+}
 
 // Filter logic
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
@@ -66,8 +74,8 @@ const machines = getMachines();
         </div>
       ) : (
         <div class="empty-state">
-          <p>暂无匹配的设备</p>
-          <a href={`${base}machines`} class="btn btn-outline" style="margin-top:16px">清除筛选</a>
+          <p>暂无设备，请到 Decap 后台「二手设备」添加</p>
+          <a href={`${base}machines`} class="btn btn-outline" style="margin-top:16px">刷新</a>
         </div>
       )}
       <div class="count-info">

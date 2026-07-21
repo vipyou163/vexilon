@@ -2,18 +2,20 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const modules = import.meta.glob('../content/posts/*.md');
-  const paths = [];
-  for (const [filePath, loader] of Object.entries(modules)) {
-    const mod = await loader();
-    const slug = filePath.split('/').pop().replace(/\.md$/, '');
-    paths.push({ params: { slug }, props: { mod, slug } });
+  let entries = [];
+  try {
+    entries = await Astro.glob('../../data/posts/*.md');
+  } catch (e) {
+    entries = [];
   }
-  return paths;
+  return entries.map((p) => ({
+    params: { slug: (p.file || '').split(/[\\/]/).pop().replace(/\.md$/, '') },
+    props: { entry: p },
+  }));
 }
 
-const { mod } = Astro.props;
-const { Content, frontmatter } = mod;
+const { entry } = Astro.props;
+const { Content, frontmatter } = entry;
 const fm = frontmatter || {};
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const cover = (fm.cover || '').replace(/^\//, '');

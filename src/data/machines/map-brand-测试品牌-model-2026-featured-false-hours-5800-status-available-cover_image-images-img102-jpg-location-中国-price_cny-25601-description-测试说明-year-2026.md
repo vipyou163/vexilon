@@ -9,4 +9,6 @@ status: available
 featured: false
 description: 测试说明
 cover_image: /images/img102.jpg
+gallery:
+  - /images/Homepage-Promo-Model-3-Y-Desktop-CN-v3.jpg
 ---

@@ -16,6 +16,7 @@ const featuredMachines = [
   { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
 ];
 
+const base = import.meta.env.BASE_URL || '';
 const latestPosts = [
   { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', cover: '/images/placeholder.svg' },
   { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', cover: '/images/placeholder.svg' },
@@ -110,9 +111,9 @@ const latestPosts = [
       </FadeIn>
       <div class="grid-3">
         {latestPosts.map((post) => (
-          <a href={`/posts/${post.slug}`} class="post-card fade-in">
+          <a href={`${base}posts/${post.slug}`} class="post-card fade-in">
             <div class="post-image dark-image-wrap">
-              <img src={post.cover} alt={post.title} loading="lazy" />
+              <img src={`${base}${(post.cover || 'images/placeholder.svg').replace(/^\//, '')}`} alt={post.title} loading="lazy" />
             </div>
             <div class="post-body">
               <time class="post-date">{post.date}</time>

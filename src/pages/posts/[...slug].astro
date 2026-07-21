@@ -38,6 +38,7 @@ export async function getStaticPaths() {
   }));
 }
 
+const base = import.meta.env.BASE_URL || '';
 const { title, date, cover, body } = Astro.props;
 ---
 
@@ -46,21 +47,21 @@ const { title, date, cover, body } = Astro.props;
     <div class="container">
       <div class="post-header">
         <div class="breadcrumb">
-          <a href="/posts">行业资讯</a> / <span>{title}</span>
+          <a href={`${base}posts`}>行业资讯</a> / <span>{title}</span>
         </div>
         <h1 class="post-title">{title}</h1>
         <time class="post-date">{date}</time>
       </div>
 
       <div class="post-cover dark-image-wrap">
-        <img src={cover} alt={title} />
+        <img src={`${base}${(cover || 'images/placeholder.svg').replace(/^\//, '')}`} alt={title} />
       </div>
 
       <div class="post-body" set:html={body}></div>
 
       <div class="post-footer">
-        <a href="/posts" class="btn btn-outline">← 返回资讯列表</a>
-        <a href="/contact" class="btn btn-primary">联系我们</a>
+        <a href={`${base}posts`} class="btn btn-outline">← 返回资讯列表</a>
+        <a href={`${base}contact`} class="btn btn-primary">联系我们</a>
       </div>
     </div>
   </article>

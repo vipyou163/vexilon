@@ -1,5 +1,6 @@
 ---
-const { primaryText = '浏览设备', primaryLink = '/machines', outlineText = '联系我们', outlineLink = '/contact', dark = false } = Astro.props;
+const base = import.meta.env.BASE_URL || '';
+const { primaryText = '浏览设备', primaryLink = `${base}machines`, outlineText = '联系我们', outlineLink = `${base}contact`, dark = false } = Astro.props;
 ---
 
 <div class="cta-group">

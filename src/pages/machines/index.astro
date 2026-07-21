@@ -21,6 +21,7 @@ const allMachines = [
 ];
 
 // Filter logic
+const base = import.meta.env.BASE_URL || '';
 const brands = [...new Set(allMachines.map(m => m.brand))];
 const locations = [...new Set(allMachines.map(m => m.location))];
 
@@ -66,7 +67,7 @@ const machines = getMachines();
       ) : (
         <div class="empty-state">
           <p>暂无匹配的设备</p>
-          <a href="/machines" class="btn btn-outline" style="margin-top:16px">清除筛选</a>
+          <a href={`${base}machines`} class="btn btn-outline" style="margin-top:16px">清除筛选</a>
         </div>
       )}
       <div class="count-info">

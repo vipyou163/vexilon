@@ -1,3 +1,6 @@
+---
+const base = import.meta.env.BASE_URL || '';
+---
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -10,9 +13,9 @@
       </div>
       <div class="footer-col">
         <h4>快速链接</h4>
-        <a href="/machines">设备库</a>
-        <a href="/posts">行业资讯</a>
-        <a href="/contact">联系我们</a>
+        <a href={`${base}machines`}>设备库</a>
+        <a href={`${base}posts`}>行业资讯</a>
+        <a href={`${base}contact`}>联系我们</a>
       </div>
       <div class="footer-col">
         <h4>联系方式</h4>

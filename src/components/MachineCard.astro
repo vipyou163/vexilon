@@ -12,15 +12,16 @@ export interface Props {
 }
 
 const { brand, model, year, hours, price_cny, location, status, cover_image, slug } = Astro.props;
+const base = import.meta.env.BASE_URL || '';
 const statusLabel = { available: '在售', reserved: '已预定', sold: '已售' }[status] || status;
 const priceFormatted = price_cny >= 10000
   ? `${(price_cny / 10000).toFixed(1)}万`
   : `¥${price_cny.toLocaleString()}`;
 ---
 
-<a href={`/machines/${slug}`} class="machine-card fade-in">
+  <a href={`${base}machines/${slug}`} class="machine-card fade-in">
   <div class="card-image dark-image-wrap">
-    <img src={cover_image || '/images/placeholder.svg'} alt={`${brand} ${model}`} loading="lazy" />
+    <img src={`${base}${(cover_image || 'images/placeholder.svg').replace(/^\//, '')}`} alt={`${brand} ${model}`} loading="lazy" />
     <span class={`status-badge status-${status}`}>{statusLabel}</span>
   </div>
   <div class="card-body">

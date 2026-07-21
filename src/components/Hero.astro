@@ -1,13 +1,13 @@
 ---
 const { image, headline, subheadline } = Astro.props;
-const base = import.meta.env.BASE_URL || '';
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 ---
 
 <section class="hero">
   <div class="hero-bg dark-image-wrap">
     <img src={`${base}${(image || 'images/hero-excavator.jpg').replace(/^\//, '')}`} alt="" />
   </div>
-  <div class="hero-overlay"></div>
+  <div class="hero-overlay-light"></div>
   <div class="hero-content">
     <h1 class="hero-title fade-in">{headline || '二手工程机械<br/>专业交易平台'}</h1>
     <p class="hero-subtitle fade-in">{subheadline || '数百台卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明'}</p>
@@ -41,14 +41,14 @@ const base = import.meta.env.BASE_URL || '';
     object-fit: cover;
   }
 
-  .hero-overlay {
+  .hero-overlay-light {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       135deg,
-      rgba(0,0,0,0.7) 0%,
-      rgba(0,0,0,0.4) 50%,
-      rgba(0,0,0,0.6) 100%
+      rgba(0,0,0,0.4) 0%,
+      rgba(0,0,0,0.15) 50%,
+      rgba(0,0,0,0.3) 100%
     );
     z-index: 1;
   }

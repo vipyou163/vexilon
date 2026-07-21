@@ -43,7 +43,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const base = import.meta.env.BASE_URL || '';
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const { brand, model, year, hours, price_cny, location, status, description, cover_image, gallery } = Astro.props;
 const statusLabel = { available: '在售', reserved: '已预定', sold: '已售' }[status] || status;
 const priceFormatted = price_cny >= 10000 ? `¥${(price_cny / 10000).toFixed(1)}万` : `¥${price_cny.toLocaleString()}`;

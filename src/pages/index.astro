@@ -16,7 +16,7 @@ const featuredMachines = [
   { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
 ];
 
-const base = import.meta.env.BASE_URL || '';
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const latestPosts = [
   { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', cover: '/images/placeholder.svg' },
   { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', cover: '/images/placeholder.svg' },
@@ -45,7 +45,7 @@ const latestPosts = [
         ))}
       </div>
       <div class="section-cta">
-        <CTAButtons primaryText="查看全部设备" primaryLink="/machines" />
+        <CTAButtons primaryText="查看全部设备" primaryLink={`${base}machines`} />
       </div>
     </div>
   </section>
@@ -123,7 +123,7 @@ const latestPosts = [
         ))}
       </div>
       <div class="section-cta">
-        <CTAButtons primaryText="查看全部文章" primaryLink="/posts" />
+        <CTAButtons primaryText="查看全部文章" primaryLink={`${base}posts`} />
       </div>
     </div>
   </section>
@@ -137,9 +137,9 @@ const latestPosts = [
           <p class="cta-desc">告诉我们您的需求，我们帮您全国找车</p>
           <CTAButtons
             primaryText="立即咨询"
-            primaryLink="/contact"
+            primaryLink={`${base}contact`}
             outlineText="浏览设备库"
-            outlineLink="/machines"
+            outlineLink={`${base}machines`}
             dark={false}
           />
         </div>

@@ -1,5 +1,5 @@
 ---
-const base = import.meta.env.BASE_URL || '';
+const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const { primaryText = '浏览设备', primaryLink = `${base}machines`, outlineText = '联系我们', outlineLink = `${base}contact`, dark = false } = Astro.props;
 ---
 

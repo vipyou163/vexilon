@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CTAButtons from '../../components/CTAButtons.astro';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   // 读取 Decap CMS 发布的真实设备（src/data/machines/*.md）。
@@ -33,6 +34,15 @@ export async function getStaticPaths() {
 
 const base = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
 const { brand, model, year, hours, price_cny, location, status, description, cover_image, gallery } = Astro.props;
+
+// 设备描述是 markdown 字段（存于 frontmatter），需用 marked 渲染；
+// 同时把其中的 /images/... 图片地址补上 base 前缀，避免子路径 404。
+const descHtmlRaw = marked.parse(description || '');
+function withBase(html) {
+  const b = base.replace(/\/$/, '');
+  return html.replace(/(src|href)="\/(?!vexilon)([^\/][^"]*)"/g, `$1="${b}/$2`);
+}
+const descHtml = withBase(descHtmlRaw);
 const statusLabel = { available: '在售', reserved: '已预定', sold: '已售' }[status] || status;
 const priceFormatted = price_cny >= 10000 ? `¥${(price_cny / 10000).toFixed(1)}万` : `¥${price_cny.toLocaleString()}`;
 ---
@@ -81,7 +91,7 @@ const priceFormatted = price_cny >= 10000 ? `¥${(price_cny / 10000).toFixed(1)}
             </div>
           </div>
 
-          <div class="description" set:html={description}></div>
+          <div class="description" set:html={descHtml}></div>
         </div>
 
         <div class="detail-sidebar">

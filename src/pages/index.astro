@@ -1,0 +1,302 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import MachineCard from '../components/MachineCard.astro';
+import FadeIn from '../components/FadeIn.astro';
+import CTAButtons from '../components/CTAButtons.astro';
+
+// In production, these would come from Astro.glob('../../content/machines/*.md')
+// For now, use sample data to demonstrate the design
+const featuredMachines = [
+  { slug: 'cat-320d-2020', brand: '卡特彼勒', model: '320D', year: 2020, hours: 4200, price_cny: 285000, location: '上海', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'komatsu-pc200-2019', brand: '小松', model: 'PC200-8', year: 2019, hours: 5800, price_cny: 238000, location: '山东', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'hitachi-zx210-2021', brand: '日立', model: 'ZX210', year: 2021, hours: 3200, price_cny: 320000, location: '江苏', status: 'reserved', cover_image: '/images/placeholder.svg' },
+  { slug: 'kobelco-sk200-2018', brand: '神钢', model: 'SK200-8', year: 2018, hours: 7600, price_cny: 195000, location: '安徽', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'sany-sy215-2022', brand: '三一', model: 'SY215C', year: 2022, hours: 1800, price_cny: 268000, location: '湖南', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
+];
+
+const latestPosts = [
+  { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', cover: '/images/placeholder.svg' },
+  { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', cover: '/images/placeholder.svg' },
+  { slug: 'market-trends-jul', title: '2026年二手工程机械市场走势分析', date: '2026-07-05', cover: '/images/placeholder.svg' },
+];
+---
+
+<BaseLayout title="首页">
+  <Hero
+    headline="二手工程机械<br/>专业交易平台"
+    subheadline="数百台卡特、小松、日立、神钢等品牌二手挖机<br/>品质保障，价格透明，全国可发"
+  />
+
+  <!-- Featured Machines -->
+  <section class="section featured-section">
+    <div class="container">
+      <FadeIn>
+        <h2 class="section-title">精选设备</h2>
+        <p class="section-subtitle">严格质检，真实车况，让每一台机器都经得起考验</p>
+      </FadeIn>
+      <div class="grid-3">
+        {featuredMachines.slice(0, 6).map((m, i) => (
+          <div style={`transition-delay: ${i * 100}ms`}>
+            <MachineCard {...m} />
+          </div>
+        ))}
+      </div>
+      <div class="section-cta">
+        <CTAButtons primaryText="查看全部设备" primaryLink="/machines" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Why Us -->
+  <section class="section about-section">
+    <div class="container">
+      <div class="about-grid">
+        <FadeIn>
+          <div class="about-text">
+            <h2 class="section-title">为什么选择我们</h2>
+            <p class="section-subtitle">十年行业经验，服务超过500家客户，让设备交易更简单</p>
+            <div class="stats">
+              <div class="stat">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">服务客户</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">300+</span>
+                <span class="stat-label">在售设备</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">客户满意度</span>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+        <FadeIn>
+          <div class="about-features">
+            <div class="feature">
+              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div>
+                <h4>品质保障</h4>
+                <p>每台设备经过专业检测，真实车况无隐瞒</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div>
+                <h4>快速成交</h4>
+                <p>手续齐全，物流配送全国，最快3天交付</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+              <div>
+                <h4>售后无忧</h4>
+                <p>提供整机质保，技术团队随时响应支持</p>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Posts -->
+  <section class="section posts-section">
+    <div class="container">
+      <FadeIn>
+        <h2 class="section-title">行业资讯</h2>
+      </FadeIn>
+      <div class="grid-3">
+        {latestPosts.map((post) => (
+          <a href={`/posts/${post.slug}`} class="post-card fade-in">
+            <div class="post-image dark-image-wrap">
+              <img src={post.cover} alt={post.title} loading="lazy" />
+            </div>
+            <div class="post-body">
+              <time class="post-date">{post.date}</time>
+              <h3 class="post-title">{post.title}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="section-cta">
+        <CTAButtons primaryText="查看全部文章" primaryLink="/posts" />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="container">
+      <FadeIn>
+        <div class="cta-block">
+          <h2 class="cta-title">找不到心仪的设备？</h2>
+          <p class="cta-desc">告诉我们您的需求，我们帮您全国找车</p>
+          <CTAButtons
+            primaryText="立即咨询"
+            primaryLink="/contact"
+            outlineText="浏览设备库"
+            outlineLink="/machines"
+            dark={false}
+          />
+        </div>
+      </FadeIn>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .featured-section { background: var(--color-bg); }
+
+  .section-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+  }
+
+  .about-section { background: var(--color-bg-alt); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 32px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+  }
+
+  .about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: rgba(52,87,213,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  .feature h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .feature p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .posts-section { background: var(--color-bg); }
+
+  .post-card {
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .post-card:hover {
+    border-color: var(--color-border-light);
+    transform: translateY(-4px);
+  }
+
+  .post-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-body {
+    padding: 20px;
+  }
+
+  .post-date {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+  }
+
+  .post-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .cta-section {
+    background: var(--color-bg-alt);
+    text-align: center;
+  }
+
+  .cta-block {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .cta-desc {
+    color: var(--color-text-muted);
+    margin-bottom: 32px;
+    font-size: 1.05rem;
+  }
+
+  .cta-block .cta-group { justify-content: center; }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .stats { gap: 24px; }
+    .stat-number { font-size: 1.6rem; }
+  }
+
+  @media (max-width: 640px) {
+    .stats { flex-direction: column; gap: 16px; }
+  }
+</style>

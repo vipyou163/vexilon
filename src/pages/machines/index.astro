@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MachineCard from '../../components/MachineCard.astro';
+import FilterBar from '../../components/FilterBar.astro';
+
+// In production, use: const machines = await Astro.glob('../../content/machines/*.md');
+// For demo, use sample data
+const allMachines = [
+  { slug: 'cat-320d-2020', brand: '卡特彼勒', model: '320D', year: 2020, hours: 4200, price_cny: 285000, location: '上海', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'komatsu-pc200-2019', brand: '小松', model: 'PC200-8', year: 2019, hours: 5800, price_cny: 238000, location: '山东', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'hitachi-zx210-2021', brand: '日立', model: 'ZX210', year: 2021, hours: 3200, price_cny: 320000, location: '江苏', status: 'reserved', cover_image: '/images/placeholder.svg' },
+  { slug: 'kobelco-sk200-2018', brand: '神钢', model: 'SK200-8', year: 2018, hours: 7600, price_cny: 195000, location: '安徽', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'sany-sy215-2022', brand: '三一', model: 'SY215C', year: 2022, hours: 1800, price_cny: 268000, location: '湖南', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'cat-336d-2017', brand: '卡特彼勒', model: '336D', year: 2017, hours: 9200, price_cny: 450000, location: '新疆', status: 'sold', cover_image: '/images/placeholder.svg' },
+  { slug: 'hitachi-zx330-2019', brand: '日立', model: 'ZX330', year: 2019, hours: 5100, price_cny: 380000, location: '内蒙古', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'xcmg-xe215-2021', brand: '徐工', model: 'XE215D', year: 2021, hours: 2600, price_cny: 245000, location: '江苏', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'komatsu-pc300-2020', brand: '小松', model: 'PC300-8', year: 2020, hours: 3800, price_cny: 420000, location: '山东', status: 'reserved', cover_image: '/images/placeholder.svg' },
+  { slug: 'cat-330d-2016', brand: '卡特彼勒', model: '330D', year: 2016, hours: 11000, price_cny: 320000, location: '云南', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'hyundai-r225-2022', brand: '现代', model: 'R225LVS', year: 2022, hours: 1500, price_cny: 288000, location: '河北', status: 'available', cover_image: '/images/placeholder.svg' },
+  { slug: 'kobelco-sk350-2019', brand: '神钢', model: 'SK350-8', year: 2019, hours: 6400, price_cny: 358000, location: '四川', status: 'sold', cover_image: '/images/placeholder.svg' },
+];
+
+// Filter logic
+const brands = [...new Set(allMachines.map(m => m.brand))];
+const locations = [...new Set(allMachines.map(m => m.location))];
+
+// Read URL params for filter
+function getMachines() {
+  let result = [...allMachines];
+  const params = Astro.url.searchParams;
+  const brand = params.get('brand');
+  const location = params.get('location');
+  const status = params.get('status');
+  const sort = params.get('sort');
+
+  if (brand) result = result.filter(m => m.brand === brand);
+  if (location) result = result.filter(m => m.location === location);
+  if (status) result = result.filter(m => m.status === status);
+
+  if (sort === 'price-asc') result.sort((a, b) => a.price_cny - b.price_cny);
+  else if (sort === 'price-desc') result.sort((a, b) => b.price_cny - a.price_cny);
+  else if (sort === 'year-desc') result.sort((a, b) => b.year - a.year);
+  else if (sort === 'hours-asc') result.sort((a, b) => a.hours - b.hours);
+
+  return result;
+}
+
+const machines = getMachines();
+---
+
+<BaseLayout title="设备库">
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-title fade-in">设备库</h1>
+      <p class="page-desc fade-in">浏览我们精选的二手工程机械设备，真实车况，品质保障</p>
+    </div>
+  </section>
+
+  <section class="section listing-section">
+    <div class="container">
+      <FilterBar brands={brands} locations={locations} />
+      {machines.length > 0 ? (
+        <div class="grid-3">
+          {machines.map((m) => <MachineCard {...m} />)}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>暂无匹配的设备</p>
+          <a href="/machines" class="btn btn-outline" style="margin-top:16px">清除筛选</a>
+        </div>
+      )}
+      <div class="count-info">
+        共 <strong>{machines.length}</strong> 台设备
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding: 120px 0 48px;
+    background: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .page-desc {
+    color: var(--color-text-muted);
+    margin-top: 12px;
+    font-size: 1.05rem;
+  }
+
+  .listing-section { padding-top: 40px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 64px 0;
+    color: var(--color-text-muted);
+  }
+
+  .count-info {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-dim);
+  }
+</style>

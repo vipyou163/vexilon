@@ -1,0 +1,147 @@
+<header id="site-header" class="header">
+  <div class="header-inner container">
+    <a href="/" class="logo">
+      <span class="logo-icon">M</span>
+      <span class="logo-text">机器优选</span>
+    </a>
+    <nav class="nav">
+      <a href="/" class="nav-link">首页</a>
+      <a href="/machines" class="nav-link">设备库</a>
+      <a href="/posts" class="nav-link">资讯</a>
+      <a href="/contact" class="nav-link">联系我们</a>
+    </nav>
+    <a href="/machines" class="btn btn-primary nav-cta">查看设备</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: var(--nav-height);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    background: transparent;
+  }
+
+  .header.scrolled {
+    background: var(--color-bg-nav);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: 32px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--color-accent);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-right: auto;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-link:hover { color: var(--color-text); }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transition: width 0.2s;
+  }
+
+  .nav-link:hover::after { width: 100%; }
+
+  .nav-cta {
+    padding: 8px 24px;
+    font-size: 0.85rem;
+  }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    .nav, .nav-cta { display: none; }
+    .menu-toggle { display: flex; }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  const toggle = document.getElementById('menu-toggle');
+  toggle?.addEventListener('click', () => {
+    const nav = document.querySelector('.nav');
+    const cta = document.querySelector('.nav-cta');
+    if (nav && cta) {
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+      cta.style.display = cta.style.display === 'inline-flex' ? 'none' : 'inline-flex';
+    }
+  });
+</script>

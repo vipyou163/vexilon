@@ -1,0 +1,89 @@
+---
+const { image, headline, subheadline } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-bg dark-image-wrap">
+    <img src={image || '/images/hero-excavator.jpg'} alt="" />
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title fade-in">{headline || '二手工程机械<br/>专业交易平台'}</h1>
+    <p class="hero-subtitle fade-in">{subheadline || '数百台卡特、小松、日立、神钢等品牌二手挖机，品质保障，价格透明'}</p>
+    <div class="hero-actions fade-in">
+      <a href="/machines" class="btn btn-primary">浏览设备</a>
+      <a href="/contact" class="btn btn-outline">联系我们</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    max-height: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0,0,0,0.7) 0%,
+      rgba(0,0,0,0.4) 50%,
+      rgba(0,0,0,0.6) 100%
+    );
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 0 24px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--color-text-muted);
+    margin-bottom: 40px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-actions .btn { font-size: 1rem; padding: 14px 44px; }
+</style>

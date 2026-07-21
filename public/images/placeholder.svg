@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <text x="400" y="280" text-anchor="middle" font-size="48" fill="#444" font-family="system-ui">🏗️</text>
+  <text x="400" y="340" text-anchor="middle" font-size="16" fill="#555" font-family="system-ui">设备图片</text>
+</svg>

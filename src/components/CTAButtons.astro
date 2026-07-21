@@ -1,0 +1,36 @@
+---
+const { primaryText = '浏览设备', primaryLink = '/machines', outlineText = '联系我们', outlineLink = '/contact', dark = false } = Astro.props;
+---
+
+<div class="cta-group">
+  <a href={primaryLink} class={`btn btn-primary ${dark ? 'btn-dark' : ''}`}>{primaryText}</a>
+  <a href={outlineLink} class={`btn btn-outline ${dark ? 'btn-dark' : ''}`}>{outlineText}</a>
+</div>
+
+<style>
+  .cta-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-dark.btn-primary {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  .btn-dark.btn-primary:hover {
+    background: #ddd;
+    border-color: #ddd;
+  }
+
+  .btn-dark.btn-outline {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .btn-dark.btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+  }
+</style>

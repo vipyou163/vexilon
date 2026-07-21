@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = [
+  { slug: 'choose-used-excavator', title: '二手挖机选购指南：5个关键检查点', date: '2026-07-15', summary: '买二手挖机不知道怎么看？本文从发动机、液压系统、底盘、工作装置和电气系统五个方面教你如何全面检查。', cover: '/images/placeholder.svg' },
+  { slug: 'maintenance-tips', title: '夏季工程机械保养注意事项', date: '2026-07-10', summary: '高温天气下工程机械容易出现哪些问题？夏季保养需要注意哪些细节？一文告诉你。', cover: '/images/placeholder.svg' },
+  { slug: 'market-trends-jul', title: '2026年二手工程机械市场走势分析', date: '2026-07-05', summary: '随着基建投资回暖，二手工程机械市场呈现哪些新趋势？价格走向如何？', cover: '/images/placeholder.svg' },
+  { slug: 'excavator-brands-compare', title: '卡特 vs 小松 vs 日立：三大品牌挖机对比', date: '2026-06-28', summary: '卡特彼勒、小松、日立这三大品牌的二手挖机各有什么优劣势？选购建议来了。', cover: '/images/placeholder.svg' },
+  { slug: 'financing-guide', title: '二手挖机分期购买指南', date: '2026-06-20', summary: '资金不够想分期买挖机？了解这些分期方案和注意事项。', cover: '/images/placeholder.svg' },
+];
+---
+
+<BaseLayout title="行业资讯">
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-title fade-in">行业资讯</h1>
+      <p class="page-desc fade-in">二手工程机械行业动态、选购指南、保养知识</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="posts-list">
+        {posts.map((post) => (
+          <a href={`/posts/${post.slug}`} class="post-card fade-in">
+            <div class="post-card-image dark-image-wrap">
+              <img src={post.cover} alt={post.title} loading="lazy" />
+            </div>
+            <div class="post-card-body">
+              <time class="post-card-date">{post.date}</time>
+              <h2 class="post-card-title">{post.title}</h2>
+              <p class="post-card-summary">{post.summary}</p>
+              <span class="post-card-link">阅读全文 →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding: 120px 0 48px;
+    background: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-title { font-size: 2.5rem; font-weight: 700; }
+  .page-desc { color: var(--color-text-muted); margin-top: 12px; font-size: 1.05rem; }
+
+  .posts-list { display: flex; flex-direction: column; gap: 24px; }
+
+  .post-card {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .post-card:hover {
+    border-color: var(--color-border-light);
+    transform: translateY(-3px);
+  }
+
+  .post-card-image {
+    height: 100%;
+    min-height: 180px;
+  }
+
+  .post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-card-body {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .post-card-date {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    margin-bottom: 8px;
+  }
+
+  .post-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .post-card-summary {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .post-card-link {
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .post-card { grid-template-columns: 1fr; }
+    .post-card-image { height: 200px; }
+  }
+</style>

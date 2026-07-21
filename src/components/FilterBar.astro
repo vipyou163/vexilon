@@ -1,0 +1,82 @@
+---
+export interface Props {
+  brands: string[];
+  locations: string[];
+}
+
+const { brands, locations } = Astro.props;
+---
+
+<div class="filter-bar" id="filter-bar">
+  <div class="filter-group">
+    <select id="filter-brand" class="filter-select">
+      <option value="">全部品牌</option>
+      {brands.map(b => <option value={b}>{b}</option>)}
+    </select>
+    <select id="filter-location" class="filter-select">
+      <option value="">全部地区</option>
+      {locations.map(l => <option value={l}>{l}</option>)}
+    </select>
+    <select id="filter-status" class="filter-select">
+      <option value="">全部状态</option>
+      <option value="available">在售</option>
+      <option value="reserved">已预定</option>
+      <option value="sold">已售</option>
+    </select>
+    <select id="filter-sort" class="filter-select">
+      <option value="default">默认排序</option>
+      <option value="price-asc">价格从低到高</option>
+      <option value="price-desc">价格从高到低</option>
+      <option value="year-desc">年份最新</option>
+      <option value="hours-asc">工时最少</option>
+    </select>
+  </div>
+</div>
+
+<style>
+  .filter-bar {
+    margin-bottom: 32px;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 10px 36px 10px 14px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%23999'%3E%3Cpath d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    min-width: 140px;
+    transition: border-color 0.2s;
+  }
+
+  .filter-select:hover { border-color: var(--color-border-light); }
+  .filter-select:focus { outline: none; border-color: var(--color-accent); }
+</style>
+
+<script>
+  const selects = document.querySelectorAll('#filter-bar select');
+  const url = new URL(window.location.href);
+
+  // Read current params
+  selects.forEach(sel => {
+    const param = sel.id.replace('filter-', '');
+    if (url.searchParams.has(param)) sel.value = url.searchParams.get(param);
+    sel.addEventListener('change', () => {
+      if (sel.value) url.searchParams.set(param, sel.value);
+      else url.searchParams.delete(param);
+      window.location.href = url.toString();
+    });
+  });
+</script>

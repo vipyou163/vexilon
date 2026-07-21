@@ -1,0 +1,105 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">M</span>
+          <span class="logo-text">机器优选</span>
+        </div>
+        <p class="footer-desc">专业二手工程机械设备交易平台，专注卡特、小松、日立、神钢等品牌二手挖机销售与服务。</p>
+      </div>
+      <div class="footer-col">
+        <h4>快速链接</h4>
+        <a href="/machines">设备库</a>
+        <a href="/posts">行业资讯</a>
+        <a href="/contact">联系我们</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系方式</h4>
+        <span>电话：138-0000-0000</span>
+        <span>微信：machine_2024</span>
+        <span>邮箱：info@example.com</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {new Date().getFullYear()} 机器优选 版权所有</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-bg-alt);
+    border-top: 1px solid var(--color-border);
+    padding: 64px 0 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .logo { margin-bottom: 16px; }
+
+  .logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--color-accent);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .logo-text { font-weight: 600; font-size: 1.05rem; }
+
+  .footer-desc {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    max-width: 320px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-dim);
+    margin-bottom: 8px;
+  }
+
+  .footer-col a,
+  .footer-col span {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--color-text); }
+
+  .footer-bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-dim);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>
